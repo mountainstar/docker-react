@@ -1,0 +1,19 @@
+name: Main Workflow
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+permissions:
+  contents: read
+jobs:
+  build:
+    name: Build Container
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Build docker images
+        run: docker build -t mountainstar/docker-react -f Dockerfile.dev .
+      - name: Run tests
+        run: docker run -e CI=true mountainstar/docker-react npm run test
